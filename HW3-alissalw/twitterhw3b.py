@@ -10,10 +10,10 @@
 import tweepy
 from textblob import TextBlob
 
-consumer_key = "EjzZnHYdYljefY08cA1dIlmoe" 
-consumer_secret = "NZqokIblQCUsMngIaHoxPGPEhaetVQ3GzmOH7A2dGDHybBYY1J"
-access_token = '755787072926023680-PojkYpSk41Xs9SUBxuW3p5i7Q3hUx7A'
-access_token_secret = '554sRkHDAMfYcQaxNHHhef6d4IVyA7v7oCaEy82mTGhlH'
+access_token = "755787072926023680-G9nP4lXtXbesPI9ll9r4pKE3GuMQihZ"
+access_token_secret = "FFMKaapNxMRhAEiopKk07nNrRVaX3tEaiRixS8vr5oYsn"
+consumer_key = "B8p7Bj2FmMdAtHM8C5SVKkZEx"
+consumer_secret = "iIDkJUDrQAXobB3QnpItYhPlYmAUISG7QDyWK2HrMLAy7p3bNY"
 
 auth = tweepy.OAuthHandler(consumer_key,consumer_secret)
 auth.set_access_token(access_token,access_token_secret)
@@ -22,8 +22,7 @@ api = tweepy.API(auth)
 
 public_tweets = api.search('Hillary Clinton')
 
-for tweet in public_tweets:
-	print(tweet.text)
+
 	
 
 subjectivity = []

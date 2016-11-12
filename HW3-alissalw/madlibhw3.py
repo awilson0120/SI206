@@ -15,9 +15,10 @@ from nltk.book import text2
 import random
 
 tokens = text2[11:161]
+print(tokens)
 tagged_tokens = nltk.pos_tag(tokens)
-tagmap = {"NN":"a noun","NNS":"a plural noun","VB":"a verb","JJ":"an adjective"}
-substitution_probabilities = {"NN":.15,"NNS":.1,"VB":.1,"JJ":.1}
+tagmap = {"NN":"a noun","NNS":"a plural noun","VB":"a verb","JJ":"an adjective", "RB": "an adverb"}
+substitution_probabilities = {"NN":.15,"NNS":.15,"VB":.1,"JJ":.1, "RB":.1}
 
 def spaced(word):
 	if word in [",", ".", "?", "!", ":"]:
