@@ -1,21 +1,15 @@
-import pygame
+from pygame import *
+from pygame.sprite import *
 import pyglet
  
+GREEN = (0, 100, 0)
 BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
-BLUE = (0, 0, 255)
-GREEN = (0, 255, 0)
-RED = (255, 0, 0)
-PURPLE = (255, 0, 255)
-
  
 class Wall(pygame.sprite.Sprite):
     def __init__(self, x, y, width, height, color):
         super().__init__()
-        image = pygame.image.load('curved_paddle2.png')
-        image.convert()
-        # self.image = pygame.Surface([width, height])
-        # self.image.fill(color)
+        self.image = pygame.Surface([width, height])
+        self.image.fill(color)
         self.rect = self.image.get_rect()
         self.rect.y = y
         self.rect.x = x
@@ -26,8 +20,7 @@ class Player(pygame.sprite.Sprite):
  
     def __init__(self, x, y):
         super().__init__()
-        self.image = pygame.Surface([15, 15])
-        self.image.fill(WHITE)
+        self.image = image.load('harry.bmp').convert_alpha()
         self.rect = self.image.get_rect()
         self.rect.y = y
         self.rect.x = x
@@ -59,11 +52,16 @@ class Player(pygame.sprite.Sprite):
                 self.rect.top = block.rect.bottom
                 pygame.quit()
 
- 
- 
+class Cup(pygame.sprite.Sprite):
+      def __init__(self, x, y):
+        super().__init__()
+        self.image = image.load('Triwizard_Cup.bmp').convert_alpha()
+        self.rect = self.image.get_rect()
+        self.rect.y = y
+        self.rect.x = x
+
 class Room(object):
-    wall_list = None
- 
+    wall_list = []
     def __init__(self):
         self.wall_list = pygame.sprite.Group()
  
@@ -71,13 +69,14 @@ class Room(object):
 class Room1(Room):
     def __init__(self):
         super().__init__()
-        walls = [[0, 0, 20, 250, WHITE],
-                 [0, 350, 20, 250, WHITE],
-                 [780, 0, 20, 250, WHITE],
-                 [780, 350, 20, 250, WHITE],
-                 [20, 0, 760, 20, WHITE],
-                 [20, 580, 760, 20, WHITE],
-                 [390, 50, 20, 500, BLUE]
+        walls = [[0, 0, 20, 250, GREEN],
+                 [0, 350, 20, 250, GREEN],
+                 [780, 0, 20, 250, GREEN],
+                 [780, 350, 20, 250, GREEN],
+                 [20, 0, 760, 20, GREEN],
+                 [20, 580, 760, 20, GREEN],
+                 [250, 50, 20, 250, GREEN],
+                 [250, 350, 450, 20, GREEN]
                 ]
         for item in walls:
             wall = Wall(item[0], item[1], item[2], item[3], item[4])
@@ -88,12 +87,12 @@ class Room2(Room):
     def __init__(self):
         super().__init__()
  
-        walls = [[0, 0, 20, 250, RED],
-                 [0, 350, 20, 250, RED],
-                 [780, 0, 20, 250, RED],
-                 [780, 350, 20, 250, RED],
-                 [20, 0, 760, 20, RED],
-                 [20, 580, 760, 20, RED],
+        walls = [[0, 0, 20, 250, GREEN],
+                 [0, 350, 20, 250, GREEN],
+                 [780, 0, 20, 250, GREEN],
+                 [780, 350, 20, 250, GREEN],
+                 [20, 0, 760, 20, GREEN],
+                 [20, 580, 760, 20, GREEN],
                  [190, 50, 20, 500, GREEN],
                  [590, 50, 20, 500, GREEN]
                 ]
@@ -107,34 +106,39 @@ class Room3(Room):
     def __init__(self):
         super().__init__()
  
-        walls = [[0, 0, 20, 250, PURPLE],
-                 [0, 350, 20, 250, PURPLE],
-                 [780, 0, 20, 250, PURPLE],
-                 [780, 350, 20, 250, PURPLE],
-                 [20, 0, 760, 20, PURPLE],
-                 [20, 580, 760, 20, PURPLE]
+        walls = [[0, 0, 20, 250, GREEN],
+                 [0, 350, 20, 250, GREEN],
+                 [780, 0, 20, 250, GREEN],
+                 [780, 350, 20, 250, GREEN],
+                 [20, 0, 760, 20, GREEN],
+                 [20, 580, 760, 20, GREEN]
                 ]
  
         for item in walls:
             wall = Wall(item[0], item[1], item[2], item[3], item[4])
             self.wall_list.add(wall)
+        
+        
+        #for x in range(100, 800, 100):
+            # for y in range(50, 451, 300):
+            #     wall = Wall(x, y, 20, 200, GREEN)
+            #     self.wall_list.add(wall)
  
-        for x in range(100, 800, 100):
-            for y in range(50, 451, 300):
-                wall = Wall(x, y, 20, 200, RED)
-                self.wall_list.add(wall)
- 
-        for x in range(150, 700, 100):
-            wall = Wall(x, 200, 20, 200, WHITE)
-            self.wall_list.add(wall)
+        #for x in range(150, 700, 100):
+            # wall = Wall(x, 200, 20, 200, GREEN)
+            # self.wall_list.add(wall)
  
  
 def main():
     pygame.init()
     screen = pygame.display.set_mode([800, 600])
     player = Player(50, 50)
+    cup = Cup(10,10)
     movingsprites = pygame.sprite.Group()
     movingsprites.add(player)
+    staticsprites = pygame.sprite.RenderPlain()
+    staticsprites.add(cup)
+
 
     rooms = []
  
@@ -152,13 +156,11 @@ def main():
  
     clock = pygame.time.Clock()
     
-    font = pygame.font.Font(None, 25)
+    #font = pygame.font.Font(None, 25)
     
     done = False
  
     while not done:
-
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 done = True
@@ -213,6 +215,9 @@ def main():
                 current_room_no = 0
                 current_room = rooms[current_room_no]
                 player.rect.x = 0
+        
+
+            
  
         screen.fill(BLACK)
  
