@@ -69,14 +69,15 @@ class Room(object):
 class Room1(Room):
     def __init__(self):
         super().__init__()
-        walls = [[0, 0, 20, 250, GREEN],
-                 [0, 350, 20, 250, GREEN],
+        walls = [[0, 0, 20, 350, GREEN],
+                 [0, 350, 20, 350, GREEN],
                  [780, 0, 20, 250, GREEN],
                  [780, 350, 20, 250, GREEN],
                  [20, 0, 760, 20, GREEN],
                  [20, 580, 760, 20, GREEN],
-                 [250, 50, 20, 250, GREEN],
-                 [250, 350, 450, 20, GREEN]
+                 [250, 70, 20, 450, GREEN],
+                 [250, 300, 450, 20, GREEN],
+                 [700, 300, 20, 100, GREEN]
                 ]
         for item in walls:
             wall = Wall(item[0], item[1], item[2], item[3], item[4])
@@ -93,8 +94,8 @@ class Room2(Room):
                  [780, 350, 20, 250, GREEN],
                  [20, 0, 760, 20, GREEN],
                  [20, 580, 760, 20, GREEN],
-                 [190, 50, 20, 500, GREEN],
-                 [590, 50, 20, 500, GREEN]
+                 [190, 0, 20, 525, GREEN],
+                 [590, 75, 20, 505, GREEN],
                 ]
  
         for item in walls:
@@ -119,6 +120,8 @@ class Room3(Room):
             self.wall_list.add(wall)
         
         
+        
+            
         #for x in range(100, 800, 100):
             # for y in range(50, 451, 300):
             #     wall = Wall(x, y, 20, 200, GREEN)
@@ -133,12 +136,11 @@ def main():
     pygame.init()
     screen = pygame.display.set_mode([800, 600])
     player = Player(50, 50)
-    cup = Cup(10,10)
+    cup = Cup(100,100)
     movingsprites = pygame.sprite.Group()
     movingsprites.add(player)
-    staticsprites = pygame.sprite.RenderPlain()
+    staticsprites = pygame.sprite.Group()
     staticsprites.add(cup)
-
 
     rooms = []
  
@@ -153,12 +155,14 @@ def main():
  
     current_room_no = 0
     current_room = rooms[current_room_no]
- 
-    clock = pygame.time.Clock()
-    
-    #font = pygame.font.Font(None, 25)
-    
+
     done = False
+
+    clock = pygame.time.Clock()
+    font = pygame.font.Font(None, 25)
+    frame_count = 0
+    frame_rate = 60
+    start_time = 45
  
     while not done:
         for event in pygame.event.get():
@@ -174,7 +178,6 @@ def main():
                     player.changespeed(0, -5)
                 if event.key == pygame.K_DOWN:
                     player.changespeed(0, 5)
- 
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT:
                     player.changespeed(5, 0)
@@ -186,8 +189,6 @@ def main():
                     player.changespeed(0, -5)
         
         player.move(current_room.wall_list)
-        
- 
         if player.rect.x < -15:
             if current_room_no == 0:
                 current_room_no = 2
@@ -201,7 +202,6 @@ def main():
                 current_room_no = 0
                 current_room = rooms[current_room_no]
                 player.rect.x = 790
- 
         if player.rect.x > 801:
             if current_room_no == 0:
                 current_room_no = 1
@@ -216,19 +216,29 @@ def main():
                 current_room = rooms[current_room_no]
                 player.rect.x = 0
         
-
-            
- 
-        screen.fill(BLACK)
- 
-        movingsprites.draw(screen)
-        current_room.wall_list.draw(screen)
- 
+        total_seconds = start_time - (frame_count//frame_rate)
+        if total_seconds < 0:
+            pygame.quit()
+        minutes = total_seconds//60
+        seconds = total_seconds%60
+        output_string = "Time left: {0:02}:{1:02}".format(minutes,seconds)
+        text = font.render(output_string, True, GREEN)
+        screen.blit(text, [50,50])
+        frame_count+=1
+        clock.tick(frame_rate)
         pygame.display.flip()
- 
+
+        screen.fill(BLACK)
         
-        #clock.tick(100)
- 
+        
+
+        
+        movingsprites.draw(screen)
+        if current_room_no ==0:
+            staticsprites.draw(screen)
+        current_room.wall_list.draw(screen)
+
+    
     pygame.quit()
  
 if __name__ == "__main__":
