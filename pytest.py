@@ -60,6 +60,7 @@ class Cup(pygame.sprite.Sprite):
         self.rect.y = y
         self.rect.x = x
 
+
 class Room(object):
     wall_list = []
     def __init__(self):
@@ -136,7 +137,7 @@ def main():
     pygame.init()
     screen = pygame.display.set_mode([800, 600])
     player = Player(50, 50)
-    cup = Cup(100,100)
+    cup = Cup(700,250)
     movingsprites = pygame.sprite.Group()
     movingsprites.add(player)
     staticsprites = pygame.sprite.Group()
@@ -230,11 +231,8 @@ def main():
 
         screen.fill(BLACK)
         
-        
-
-        
         movingsprites.draw(screen)
-        if current_room_no ==0:
+        if current_room_no ==2:
             staticsprites.draw(screen)
         current_room.wall_list.draw(screen)
 
