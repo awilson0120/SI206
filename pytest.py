@@ -4,7 +4,7 @@ import pyglet
  
 GREEN = (0, 100, 0)
 BLACK = (0, 0, 0)
- 
+DarkGreen = (34, 139, 34)
 class Wall(pygame.sprite.Sprite):
     def __init__(self, x, y, width, height, color):
         super().__init__()
@@ -229,13 +229,13 @@ def main():
         clock.tick(frame_rate)
         pygame.display.flip()
 
-        screen.fill(BLACK)
+        screen.fill(DarkGreen)
         
         movingsprites.draw(screen)
         if current_room_no ==2:
             staticsprites.draw(screen)
         current_room.wall_list.draw(screen)
-
+        
     
     pygame.quit()
  
