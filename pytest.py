@@ -20,7 +20,7 @@ class Player(pygame.sprite.Sprite):
  
     def __init__(self, x, y):
         super().__init__()
-        self.image = image.load('harry.bmp').convert_alpha()
+        self.image = image.load('harry1.bmp').convert_alpha()
         self.rect = self.image.get_rect()
         self.rect.y = y
         self.rect.x = x
@@ -51,6 +51,9 @@ class Player(pygame.sprite.Sprite):
             else:
                 self.rect.top = block.rect.bottom
                 pygame.quit()
+    
+    def hit(self, cup):
+        return self.rect.colliderect(cup)
 
 class Cup(pygame.sprite.Sprite):
       def __init__(self, x, y):
@@ -77,8 +80,11 @@ class Room1(Room):
                  [20, 0, 760, 20, GREEN],
                  [20, 580, 760, 20, GREEN],
                  [250, 70, 20, 450, GREEN],
+                 [250, 200, 450, 20, GREEN],
+                 [100, 400, 150, 20, GREEN],
                  [250, 300, 450, 20, GREEN],
-                 [700, 300, 20, 100, GREEN]
+                 [700, 300, 20, 200, GREEN],
+                 [500, 480, 200, 20, GREEN]
                 ]
         for item in walls:
             wall = Wall(item[0], item[1], item[2], item[3], item[4])
@@ -119,18 +125,6 @@ class Room3(Room):
         for item in walls:
             wall = Wall(item[0], item[1], item[2], item[3], item[4])
             self.wall_list.add(wall)
-        
-        
-        
-            
-        #for x in range(100, 800, 100):
-            # for y in range(50, 451, 300):
-            #     wall = Wall(x, y, 20, 200, GREEN)
-            #     self.wall_list.add(wall)
- 
-        #for x in range(150, 700, 100):
-            # wall = Wall(x, 200, 20, 200, GREEN)
-            # self.wall_list.add(wall)
  
  
 def main():
@@ -138,6 +132,9 @@ def main():
     screen = pygame.display.set_mode([800, 600])
     player = Player(50, 50)
     cup = Cup(700,250)
+    bg = image.load("voldemort.bmp")
+    bg = transform.scale(bg, (800,600))
+    movingsprites = pygame.sprite.Group
     movingsprites = pygame.sprite.Group()
     movingsprites.add(player)
     staticsprites = pygame.sprite.Group()
@@ -189,6 +186,7 @@ def main():
                 if event.key == pygame.K_DOWN:
                     player.changespeed(0, -5)
         
+        
         player.move(current_room.wall_list)
         if player.rect.x < -15:
             if current_room_no == 0:
@@ -217,6 +215,16 @@ def main():
                 current_room = rooms[current_room_no]
                 player.rect.x = 0
         
+
+        if current_room_no ==2:
+            staticsprites.draw(screen)
+            if player.hit(cup):
+                screen.blit(bg, (0,0))
+                pygame.mixer.init(frequency=22050, size=-16, channels=2, buffer=300)
+                mixer.Sound("3-01_Lumos.wav").play()
+
+
+
         total_seconds = start_time - (frame_count//frame_rate)
         if total_seconds < 0:
             pygame.quit()
@@ -232,11 +240,13 @@ def main():
         screen.fill(DarkGreen)
         
         movingsprites.draw(screen)
-        if current_room_no ==2:
-            staticsprites.draw(screen)
+
+                
+
+
         current_room.wall_list.draw(screen)
         
-    
+        
     pygame.quit()
  
 if __name__ == "__main__":
