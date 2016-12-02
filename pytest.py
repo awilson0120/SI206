@@ -62,6 +62,8 @@ class Cup(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.y = y
         self.rect.x = x
+      def destroy(self):
+        self.kill()
 
 
 class Room(object):
@@ -220,21 +222,22 @@ def main():
             staticsprites.draw(screen)
             if player.hit(cup):
                 screen.blit(bg, (0,0))
-                pygame.mixer.init(frequency=22050, size=-16, channels=2, buffer=300)
+                pygame.mixer.init(frequency=22050, size=-16, channels=2, buffer=512)
                 mixer.Sound("3-01_Lumos.wav").play()
+                done = True
 
 
-
-        total_seconds = start_time - (frame_count//frame_rate)
-        if total_seconds < 0:
-            pygame.quit()
-        minutes = total_seconds//60
-        seconds = total_seconds%60
-        output_string = "Time left: {0:02}:{1:02}".format(minutes,seconds)
-        text = font.render(output_string, True, GREEN)
-        screen.blit(text, [50,50])
-        frame_count+=1
-        clock.tick(frame_rate)
+        if not done:
+            total_seconds = start_time - (frame_count//frame_rate)
+            if total_seconds < 0:
+                pygame.quit()
+            minutes = total_seconds//60
+            seconds = total_seconds%60
+            output_string = "Time left: {0:02}:{1:02}".format(minutes,seconds)
+            text = font.render(output_string, True, GREEN)
+            screen.blit(text, [50,50])
+            frame_count+=1
+            clock.tick(frame_rate)
         pygame.display.flip()
 
         screen.fill(DarkGreen)
@@ -245,6 +248,8 @@ def main():
 
 
         current_room.wall_list.draw(screen)
+        if done==True:
+            pygame.time.delay(5000)
         
         
     pygame.quit()
