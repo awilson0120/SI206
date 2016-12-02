@@ -54,6 +54,9 @@ class Player(pygame.sprite.Sprite):
     
     def hit(self, cup):
         return self.rect.colliderect(cup)
+    
+    def destroy (self):
+        self.kill()
 
 class Cup(pygame.sprite.Sprite):
       def __init__(self, x, y):
@@ -62,6 +65,7 @@ class Cup(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.y = y
         self.rect.x = x
+      
       def destroy(self):
         self.kill()
 
@@ -221,6 +225,8 @@ def main():
         if current_room_no ==2:
             staticsprites.draw(screen)
             if player.hit(cup):
+                player.destroy()
+                cup.destroy()
                 screen.blit(bg, (0,0))
                 pygame.mixer.init(frequency=22050, size=-16, channels=2, buffer=512)
                 mixer.Sound("3-01_Lumos.wav").play()
